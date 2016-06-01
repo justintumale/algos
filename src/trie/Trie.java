@@ -19,8 +19,9 @@ public class Trie {
 	 * @param  root   the root node of the trie
 	 */
 	public static void insert(String input, TrieNode root){
+		Character currentChar = null;
 		for (int i = 0; i < input.length(); i++){
-			Character currentChar = input.charAt(i);
+			currentChar = input.charAt(i);
 			if (root.map.containsKey(currentChar)){
 				root = root.map.get(currentChar);
 			}else{
@@ -28,9 +29,8 @@ public class Trie {
 				root.map.put(currentChar, newTrieNode);
 				root = root.map.get(currentChar);
 			}
-			root.endOfWord = true;
 		}
-		
+		root.endOfWord = true;
 	}
 	public static void delete(String input, TrieNode root){
 		
@@ -38,8 +38,15 @@ public class Trie {
 	
 	public static void printTrie(TrieNode root, int level){
 		for (Map.Entry<Character, TrieNode> entry : root.map.entrySet()){
-			System.out.println("Character: " + entry.getKey() + " Level: " + level );
+			
+			System.out.println(" Level: " + level + " Character: " + entry.getKey() 
+				 + " End of word: " + root.endOfWord );
+			
 			printTrie(entry.getValue(), level+1);
+		}
+		if (root.map.isEmpty()){
+			System.out.println(" Level: " + (level+1) + " Character: " +"\"\"" 
+			 + " End of word: " + root.endOfWord );
 		}
 	}
 	
