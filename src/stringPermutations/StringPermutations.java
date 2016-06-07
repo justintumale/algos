@@ -5,7 +5,7 @@
 * 
 * @author  Justin Tumale
 * @version 1.0
-* @since   2016-06-01 
+* @since   2016-06-06 
 */
 package stringPermutations;
 import java.util.*;
@@ -22,8 +22,11 @@ public class StringPermutations {
 	//8. After the recursion, restore the count of the current character
 	//9. Go back to step 4, until there are no more available characters
 	public static void findPermutations(String input){
-		System.out.println("Finding permutations for the string \"" + input + "\":" );
-		int[]results = new int[input.length()];
+		if (input.length() < 1){
+			throw new IllegalArgumentException("Please enter a string of length >= 1.");
+		}
+		System.out.println("The permutations for the string \"" + input + "\" are:" );
+		char[]results = new char[input.length()];
 		TreeMap<Character, Integer> characterOccurences = new TreeMap<Character, Integer>();
 		for (int i = 0; i < input.length(); i++){
 			char characterOfInput = input.charAt(i);
@@ -43,15 +46,30 @@ public class StringPermutations {
 			characterOccurencesArray[index] = entry.getValue();
 			index++;
 		}
+		findPermutationsHelper(charactersArray, characterOccurencesArray, 0, results);
 	}
 	
-	public static void findPermutationsHelper(String input, char[]charactersArray, 
-				int[]characterOccurencesArray, int level){
-		//TODO Helper method for finding the permutations
+	private static void findPermutationsHelper(char[]charactersArray, int[]characterOccurencesArray, 
+	     int level, char[]results)
+	{
+		if (level >= results.length){
+			System.out.println(Arrays.toString(results));
+			return;
+		}
+		for (int i = 0; i < charactersArray.length; i++){
+			if (characterOccurencesArray[i] >0){
+				results[level] = charactersArray[i];
+				characterOccurencesArray[i] -= 1;
+				findPermutationsHelper(charactersArray, characterOccurencesArray, level+1, results);
+				characterOccurencesArray[i] +=1;
+			}else{
+				continue;
+			}
+		}
 	}
 	
 	public static void main(String[]args){
-		System.out.println("Please enter a string");
+		System.out.println("Please enter a string:");
 		Scanner in = new Scanner(System.in);
 		String input = in.nextLine();
 		findPermutations(input);
